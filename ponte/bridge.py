@@ -45,7 +45,7 @@ class Bridge:
         return display(self.fig)
 
 
-    def add_layer(self, values, add_to_bottom=True):
+    def add_layer(self, values, add_to_bottom=True, bar_args={}):
         """Add a layer of segments to the chart.
 
         Parameters
@@ -66,7 +66,8 @@ class Bridge:
             raise ValueError('values must be the same size as the series_labels used to initialize the bridge.')
 
         layer = SimpleNamespace(**{
-            'values': np.array(values).astype(float)})
+            'values': np.array(values).astype(float),
+            'bar_args': bar_args})
 
         if add_to_bottom:
             self.layers.insert(0, layer)
@@ -95,7 +96,7 @@ class Bridge:
             bottom = self._calc_bottom(values, segment_tops)
             
             # Plot
-            self.ax.bar(range(0, self.segment_count), values, bottom=bottom)
+            self.ax.bar(range(0, self.segment_count), values, bottom=bottom, **layer.bar_args)
 
             # Update segment_tops
             segment_tops = [x + y for x, y in zip(segment_tops, np.nan_to_num(values))]
