@@ -23,6 +23,7 @@ class Bridge:
     def __init__(self, segment_labels, total_segments=None, **kwargs):
 
         self.layers = []
+        self.segment_labels = segment_labels
         self.segment_count = len(segment_labels)
 
         # If total_segments is not passed, create a mask of all Falses
@@ -32,8 +33,8 @@ class Bridge:
         self.fig, self.ax = plt.subplots(**kwargs)
 
         # Set segment (xtick) positions and labels
-        self.ax.set_xticks(range(0, len(segment_labels)))
-        self.ax.set_xticklabels(segment_labels)
+        self.ax.set_xticks(range(0, len(self.segment_labels)))
+        self.ax.set_xticklabels(self.segment_labels)
 
 
     def _repr_png_(self):
@@ -77,6 +78,10 @@ class Bridge:
 
         # Clear axes
         self.ax.clear()
+        
+        # Set segment (xtick) positions and labels
+        self.ax.set_xticks(range(0, len(self.segment_labels)))
+        self.ax.set_xticklabels(self.segment_labels)
 
         segment_tops = [0] * self.segment_count  # Tracks the top of all plotted segments
 
