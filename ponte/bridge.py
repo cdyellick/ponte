@@ -45,7 +45,7 @@ class Bridge:
         return display(self.fig)
 
 
-    def add_layer(self, values, add_to_bottom=True, bar_args={}):
+    def add_layer(self, values, add_to_bottom=True, bar_args={}, segment_label_args={}):
         """Add a layer of segments to the chart.
 
         Parameters
@@ -67,7 +67,8 @@ class Bridge:
 
         layer = SimpleNamespace(**{
             'values': np.array(values).astype(float),
-            'bar_args': bar_args})
+            'bar_args': bar_args,
+            'segment_label_args': segment_label_args})
 
         if add_to_bottom:
             self.layers.insert(0, layer)
@@ -97,6 +98,11 @@ class Bridge:
             
             # Plot
             self.ax.bar(range(0, self.segment_count), values, bottom=bottom, **layer.bar_args)
+            
+            # Segments labels
+            for i, (v, b) in enumerate(zip(values, bottom)):
+                if not np.isnan(v):
+                    self.ax.text(i, (v / 2) + b, v, ha='center', va='center', **layer.segment_label_args)
 
             # Update segment_tops
             segment_tops = [x + y for x, y in zip(segment_tops, np.nan_to_num(values))]
