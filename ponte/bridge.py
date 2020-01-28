@@ -26,6 +26,10 @@ class Bridge:
         self.segment_labels = segment_labels
         self.segment_count = len(segment_labels)
 
+        # If passed, check that total_segments is the same size as segment labels
+        if total_segments and len(segment_labels) != len(total_segments):
+            raise ValueError('total_segments must be the same size as the series_labels.')
+
         # If total_segments is not passed, create a mask of all Falses
         self.total_segments = total_segments or [False] * self.segment_count
 
